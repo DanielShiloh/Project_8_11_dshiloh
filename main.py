@@ -32,6 +32,7 @@ class Dog:
         self.id = dog_id
         self.name = name
         self.breed = breed
+        self.sex = sex
         self.dob = dob
         self.human_id = human_id
 
@@ -66,7 +67,7 @@ class Registration:
         self.db_path.write_text(json.dumps(final_dict))
 
     def register_human(self, name: str, phone: str):
-        """checks for existing human and returns id,
+        """check for existing human and returns id,
         else add human to humans and return generated id"""
 
         if not name or not phone:
@@ -88,10 +89,20 @@ class Registration:
         self.save_data()
         return new_id
 
-    def register_patient(self, dog_id):
-        """register new dog/owner pair, validates input"""
-        return
+    def register_patient(self, name: str, breed: str, sex: str, dob: str, human_id: str):
+        """register new dog if human exists,
+        return generated id"""
+        
+        clean_human_id = human_id.strip().upper()
 
+        if clean_human_id not in self.humans:
+            raise ValueError(f"Human ID '{clean_human_id}' is not registered in system")
+
+        next_num = len(self.dogs) + 1
+        new_id = f"D-{next_num}"
+        self.dogs[new_id] = Dog(new_id, name, breed, sex, dob, clean_human_id)
+        self.save_data()
+        return new_id
 
 def print_header():
     print("-" * 40)
@@ -100,8 +111,8 @@ def print_header():
 
 def print_menu():
     print("\nMenu:")
-    print("1. Register new patient")
-    print("2. Search registered patients")
+    print("1. Register new human")
+    print("2. Register new dog")
     print("3. Exit")
 
 def main():
@@ -115,9 +126,8 @@ def main():
         choice = input("Select an option (1-3): ")
 
         if choice == '1':
-            print("\n--New Registration--")
+            print("\n--New Human Registration--")
             #get inputs
-            #check age is number
 
     
 
