@@ -5,6 +5,8 @@ Daniel Shiloh
 July 3, 2026
 """
 
+##generally to do: add try/except, actually read/write to file w json
+
 from pathlib import Path
 import string
 import json
@@ -72,32 +74,27 @@ class Registration:
 
         if not name or not phone:
             raise ValueError("name and phone number cannot be blank")
-        
-        clean_name = get_clean_name(name)
-        clean_phone = get_clean_phone(phone)        
 
         for existing_id, existing_human in self.humans.items():
-            if existing_human.name == clean_name and existing_human.phone == clean_phone:
+            if existing_human.name == name and existing_human.phone == phone:
                 return ""
 
         next_num = len(self.humans) + 1
         new_id = f"H-{next_num}"
-        self.humans[new_id] = Human(new_id, clean_name, clean_phone)
+        self.humans[new_id] = Human(new_id, name, phone)
         self.save_data()
         return new_id
 
-    def register_patient(self, name: str, breed: str, sex: str, dob: str, human_id: str):
+    def register_dog(self, name: str, breed: str, sex: str, dob: str, human_id: str):
         """register new dog if human exists,
         return generated id"""
         
-        clean_human_id = get_clean_name(human_id)
-
-        if clean_human_id not in self.humans:
-            raise ValueError(f"Human ID '{clean_human_id}' is not registered in system")
+        if human_id not in self.humans:
+            raise ValueError(f"Human ID '{human_id}' is not registered in system")
 
         next_num = len(self.dogs) + 1
         new_id = f"D-{next_num}"
-        self.dogs[new_id] = Dog(new_id, name, breed, sex, dob, clean_human_id)
+        self.dogs[new_id] = Dog(new_id, name, breed, sex, dob, human_id)
         self.save_data()
         return new_id
 
@@ -119,7 +116,7 @@ def print_header():
 def print_menu():
     print("\nMenu:")
     print("1. Register new human")
-    print("2. Register new dog")
+    print("2. Register new dog (requires Human ID)")
     print("3. Search registered humans")
     print("4. Search registered dogs")
     print("5. Exit")
@@ -140,10 +137,20 @@ def main():
             phone = get_clean_phone(input("Phone number: "))
             potential_id = clinic.register_human(name, phone)
             if potential_id:
-                print(f"\nYou've been registered under ID {potential_id}")
+                print(f"\nYour new ID is {potential_id}.")
             else:
                 print("That name/number is already in our system.")
     
+        elif choice == '2':
+            print("\n--New Dog Registration--")
+            human_id = get_clean_name(input("Enter owner id (eg H-4): "))
+            ######validate these inputs
+            name = get_clean_name(input("Dog's name: "))
+            breed = input("Breed: ")
+            sex = input("Sex: ")
+            dob = input("Estimated date of birth (YYYY-MM-DD): ")
+            potential_id = clinic.register_dog(name, breed, sex, dob, human_id)
+            print(f"\n{name.title()}'s ID is {potential_id}.")
 
 if __name__ == "__main__":
     main()    
