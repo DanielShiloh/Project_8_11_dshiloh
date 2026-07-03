@@ -143,7 +143,7 @@ def main():
     
         elif choice == '2':
             print("\n--New Dog Registration--")
-            human_id = get_clean_name(input("Enter owner id (eg H-4): "))
+            human_id = get_clean_name(input("Enter owner id (eg H-1): "))
             ######validate these inputs
             name = get_clean_name(input("Dog's name: "))
             breed = input("Breed: ")
@@ -151,6 +151,39 @@ def main():
             dob = input("Estimated date of birth (YYYY-MM-DD): ")
             potential_id = clinic.register_dog(name, breed, sex, dob, human_id)
             print(f"\n{name.title()}'s ID is {potential_id}.")
+
+        elif choice == '3':
+            print("\n--Human Search--")
+            human_id = get_clean_name(input("Enter human ID (eg H-1): "))
+            if human_id in clinic.humans:
+                human = clinic.humans[human_id]
+                print(f"\nHuman Found: {human.id}")
+                print(f"  Name: {human.name}")
+                print(f"  Phone: {human.phone}")
+            else:
+                print("No human found with that ID.")
+        
+        elif choice == '4':
+            print("\n--Dog Search--")
+            dog_id = get_clean_name(input("Enter dog ID (eg D-1): "))
+            if dog_id in clinic.dogs:
+                dog = clinic.dogs[dog_id]
+                human = clinic.humans[dog.human_id]
+                print(f"\nDog Found: {dog.id}")
+                print(f"  Name: {dog.name}")
+                print(f"  Breed: {dog.breed}")
+                print(f"  Sex: {dog.sex}")
+                print(f"  Date of birth (est): {dog.dob}")
+                print(f"  Human: {human.name} (ID: {human.id}), {human.phone})")
+            else:
+                print("No dog found with that ID.")
+
+        elif choice == '5':
+            print("\nExisting application.")
+            break
+
+        else:
+            print("Invalid choice.  Please pick options 1 through 5.")
 
 if __name__ == "__main__":
     main()    
