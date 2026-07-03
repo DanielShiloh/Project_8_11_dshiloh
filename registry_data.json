@@ -9,6 +9,11 @@
             "id": "H-2",
             "name": "JACK",
             "phone": "432"
+        },
+        "H-3": {
+            "id": "H-3",
+            "name": "DANIEL SHILOH",
+            "phone": "1234567890"
         }
     },
     "dogs": {
@@ -27,6 +32,14 @@
             "sex": "M",
             "dob": "2026-01-01",
             "human_id": "H-1"
+        },
+        "D-3": {
+            "id": "D-3",
+            "name": "TORRY",
+            "breed": "PIT",
+            "sex": "F",
+            "dob": "2013-11-16",
+            "human_id": "H-3"
         }
     }
 }

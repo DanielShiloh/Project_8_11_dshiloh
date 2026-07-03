@@ -161,7 +161,7 @@ def choice_search_dog(clinic):
         print(f"  Breed: {dog.breed}")
         print(f"  Sex: {dog.sex}")
         print(f"  Date of birth (est): {dog.dob}")
-        print(f"  Human: {human.name} (ID: {human.id}), {human.phone})")
+        print(f"  Human: {human.name} (ID: {human.id}), {human.phone}")
     
     else:
         print("\nNo dog found with that ID.")
