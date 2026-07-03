@@ -42,6 +42,37 @@ def test_register_human_with_blank_fields_fails(temp_db):
     except ValueError:
         pass
 
+
 #dog registration tests
+
+def test_register_dog_with_valid_human(temp_db):
+    """can a dog be registered to an existing human?"""
+    clinic = Registration(db_file=temp_db)
+    human_id = clinic.register_human(name="Im Human", phone="4321")
+    dog_id = clinic.register_dog(
+        name="human's dog", 
+        breed="mix", 
+        sex="m", 
+        dob="2026-01-01", 
+        human_id=human_id
+    )
+    assert dog_id == "D-1"
+    assert "D-1" in clinic.dogs
+
+def test_register_dog_with_invalid_human_fails(temp_db):
+    """does an invalid human id stop a dog from registering?"""
+    clinic = Registration(db_file=temp_db)
+    try:
+        clinic.register_dog(
+            name="humanless", 
+            breed="foop", 
+            sex="f", 
+            dob="2020-01-01", 
+            human_id="H-999"
+        )
+        pytest.fail("Dog registered without valid human.")
+    except ValueError:
+        pass
+
 
 #file read/write tests
