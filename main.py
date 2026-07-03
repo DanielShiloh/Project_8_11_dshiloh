@@ -17,6 +17,12 @@ class Human:
         self.id = human_id
         self.name = name
         self.phone = phone
+        
+    #def to_dict
+        """convert human data to dict, for json"""
+
+    #def from_dict
+        """create Human instance from dict"""
 
 class Dog:
     """represents single patient"""
@@ -28,6 +34,12 @@ class Dog:
         self.breed = breed
         self.dob = dob
         self.human_id = human_id
+
+    #def to_dict
+        """convert dog data to dict, for json"""
+
+    #def from_dict
+        """create Dog instance from dict"""
 
 class Registration:
     """saves, loads, and validates registration for dogs and humans"""
@@ -43,18 +55,38 @@ class Registration:
         """read from registry file with exeption handling"""
         if not self.db_path.exists():
             return
+        #if content
+        #load humans
+        #load dogs
     
     def save_data(self):
         """write current data to registry file"""
-        new_dict = ""
-        self.db_path.write_text(json.dumps(new_dict))
+        final_dict = {}
+        #for human in humans, dog in dogs, add to dict)
+        self.db_path.write_text(json.dumps(final_dict))
 
-    def register_human(self, name: str, phone: str) -> bool:
-        """register human, generates id"""
-        human_id = len(self.humans) + 1
-        self.humans[human_id] = Human(human_id, name, phone)
+    def register_human(self, name: str, phone: str):
+        """checks for existing human and returns id,
+        else add human to humans and return generated id"""
+
+        if not name or not phone:
+            raise ValueError("name and phone number cannot be blank")
+        
+        clean_name = name.strip().lower()
+        clean_phone = ""
+        for char in phone:
+            if char in string.digits:
+                clean_phone += char
+
+        for existing_id, existing_human in self.humans.items():
+            if existing_human.name == clean_name and existing_human.phone == clean_phone:
+                return existing_id
+
+        next_num = len(self.humans) + 1
+        new_id = f"H-{next_num}"
+        self.humans[new_id] = Human(new_id, clean_name, clean_phone)
         self.save_data()
-        return True
+        return new_id
 
     def register_patient(self, dog_id):
         """register new dog/owner pair, validates input"""
