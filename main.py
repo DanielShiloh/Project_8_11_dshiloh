@@ -66,7 +66,7 @@ def choice_register_human(clinic):
 
     print("\n--New Human Registration--")
 
-    name_as_is = get_non_empty_input("Human's name: ")
+    name_as_is = get_non_empty_input("Human's full name: ")
     name = get_clean_name(name_as_is)
 
     phone_as_is = get_non_empty_input("Phone number: ")
