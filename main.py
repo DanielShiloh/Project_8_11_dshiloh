@@ -67,21 +67,18 @@ class Registration:
         self.db_path.write_text(json.dumps(final_dict))
 
     def register_human(self, name: str, phone: str):
-        """check for existing human and returns id,
+        """check for existing human (return empty string),
         else add human to humans and return generated id"""
 
         if not name or not phone:
             raise ValueError("name and phone number cannot be blank")
         
-        clean_name = name.strip().lower()
-        clean_phone = ""
-        for char in phone:
-            if char in string.digits:
-                clean_phone += char
+        clean_name = clean_name(name)
+        clean_phone = clean_phone(phone)        
 
         for existing_id, existing_human in self.humans.items():
             if existing_human.name == clean_name and existing_human.phone == clean_phone:
-                return existing_id
+                return ""
 
         next_num = len(self.humans) + 1
         new_id = f"H-{next_num}"
@@ -93,7 +90,7 @@ class Registration:
         """register new dog if human exists,
         return generated id"""
         
-        clean_human_id = human_id.strip().upper()
+        clean_human_id = clean_name(human_id)
 
         if clean_human_id not in self.humans:
             raise ValueError(f"Human ID '{clean_human_id}' is not registered in system")
@@ -104,6 +101,16 @@ class Registration:
         self.save_data()
         return new_id
 
+def clean_name(name: str):
+    return name.strip().upper()
+    
+def clean_phone(phone: str):
+    clean_phone = ""
+    for char in phone:
+        if char in string.digits:
+            clean_phone += char
+    return clean_phone
+
 def print_header():
     print("-" * 40)
     print("    Daniel's Dog Clinic: Registration    ")
@@ -113,7 +120,9 @@ def print_menu():
     print("\nMenu:")
     print("1. Register new human")
     print("2. Register new dog")
-    print("3. Exit")
+    print("3. Search registered humans")
+    print("4. Search registered dogs")
+    print("5. Exit")
 
 def main():
 
@@ -123,12 +132,17 @@ def main():
 
     while True:
         print_menu()
-        choice = input("Select an option (1-3): ")
+        choice = input("Select an option (1-5): ")
 
         if choice == '1':
             print("\n--New Human Registration--")
-            #get inputs
-
+            name = clean_name(input("Human's name: "))
+            phone = clean_phone(input("Phone number: "))
+            potential_id = clinic.register_owner(name, phone)
+            if potential_id:
+                print("You've been registered under ID {potential_id}")
+            else:
+                print("That name/number is already in our system.")
     
 
 if __name__ == "__main__":
