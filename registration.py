@@ -21,13 +21,27 @@ class Registration:
         self.load_data()
     
     def load_data(self):
-        """read from registry file with exeption handling"""
+        """read from registry file with exeption handling,
+        create instances of Human and Dog from that file"""
+        
         if not self.db_path.exists():
             return
-        #TO DO:
-        #if content
-        #load humans
-        #load dogs
+
+        content = self.db_path.read_text()
+        if not content:
+            return
+    
+        try:
+            data = json.loads(content)
+        except json.JSONDecodeError:
+            print("\nJSON parsing failed.  Starting fresh.")
+            return
+        
+        for human_id, human_data in data.get("humans", {}).items():
+            self.humans[human_id] = Human.from_dict(human_data)
+
+        for dog_id, dog_data in data.get("dogs", {}).items():
+            self.dogs[dog_id] = Dog.from_dict(dog_data)
     
     def save_data(self):
         """write current data to registry file"""
