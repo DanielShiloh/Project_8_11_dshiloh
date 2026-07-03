@@ -1,1 +1,24 @@
-{}
+{
+    "humans": {
+        "H-1": {
+            "id": "H-1",
+            "name": "BOB SMITH",
+            "phone": "123"
+        },
+        "H-2": {
+            "id": "H-2",
+            "name": "JACK",
+            "phone": "432"
+        }
+    },
+    "dogs": {
+        "D-1": {
+            "id": "D-1",
+            "name": "DOGG",
+            "breed": "MIX",
+            "sex": "M",
+            "dob": "2021-01-01",
+            "human_id": "H-2"
+        }
+    }
+}

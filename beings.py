@@ -42,7 +42,7 @@ class Dog:
             "name": self.name,
             "breed": self.breed,
             "sex": self.sex,
-            "dob": self.dog,
+            "dob": self.dob,
             "human_id": self.human_id
         }
 

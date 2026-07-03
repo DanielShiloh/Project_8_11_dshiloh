@@ -34,7 +34,7 @@ class Registration:
         try:
             data = json.loads(content)
         except json.JSONDecodeError:
-            print("\nJSON parsing failed.  Starting fresh.")
+            print("\nJSON parsing failed.  Starting with empty database.")
             return
         
         for human_id, human_data in data.get("humans", {}).items():
