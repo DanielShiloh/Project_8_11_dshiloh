@@ -23,7 +23,7 @@ class Registration:
     def load_data(self):
         """read from registry file with exeption handling,
         create instances of Human and Dog from that file"""
-        
+
         if not self.db_path.exists():
             return
 
@@ -44,10 +44,24 @@ class Registration:
             self.dogs[dog_id] = Dog.from_dict(dog_data)
     
     def save_data(self):
-        """write current data to registry file"""
-        final_dict = {}
-        #TO DO: for human in humans, dog in dogs, add to dict
-        self.db_path.write_text(json.dumps(final_dict))
+        """convert each Human and Dog object to dictionary,
+        add those to empty dictionary,
+        write it to registration file"""
+
+        dict_ready_data = { "humans": {}, "dogs": {} }
+
+        for human_id, human_data in self.humans.items():
+            dict_ready_data["humans"][human_id] = human_data.to_dict()
+        
+        for dog_id, dog_data in self.dogs.items():
+            dict_ready_data["dogs"][dog_id] = dog_data.to_dict()
+            
+        json_output = json.dumps(dict_ready_data, indent=4)
+
+        try:
+            self.db_path.write_text(json_output)
+        except:
+            print("Failed to write data to file.")
 
     def register_human(self, name: str, phone: str):
         """check for existing human (return empty string),
