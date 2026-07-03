@@ -19,6 +19,14 @@
             "sex": "M",
             "dob": "2021-01-01",
             "human_id": "H-2"
+        },
+        "D-2": {
+            "id": "D-2",
+            "name": "JOHN",
+            "breed": "PIT",
+            "sex": "M",
+            "dob": "2026-01-01",
+            "human_id": "H-1"
         }
     }
 }

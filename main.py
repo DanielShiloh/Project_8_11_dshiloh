@@ -6,7 +6,6 @@ July 3, 2026
 """
 
 #TO DO list:
-# main: refactor
 # test: all test cases
 
 import string
@@ -113,29 +112,49 @@ def choice_register_dog(clinic):
     print(f"\n{name.title()}'s ID is {potential_id}.")
 
 def choice_search_human(clinic):
-    """handles process of searching and displaying human records (option 3)"""
+    """handles process of searching and displaying human records (option 3)
+    search by human_id or display all registered humans"""
     
     print("\n--Human Search--")
     
-    human_id = get_clean_name(input("Enter human ID (eg H-1): "))
+    search_input = get_clean_name(input("Enter human ID (eg H-1) or ALL: "))
     
-    if human_id in clinic.humans:
-        human = clinic.humans[human_id]
+    if search_input == "ALL":
+        if not clinic.humans:
+            print("\nNo humans registered yet.")
+            return
+        print("\n--All Registered Humans--")
+        for human in clinic.humans.values():
+            print(f"ID: {human.id}, name: {human.name}, phone: {human.phone}")
+
+    elif search_input in clinic.humans:
+        human = clinic.humans[search_input]
         print(f"\nHuman Found: {human.id}")
         print(f"  Name: {human.name}")
         print(f"  Phone: {human.phone}")
+
     else:
         print("\nNo human found with that ID.")
 
 def choice_search_dog(clinic):
-    """handles process of searching and displaying dog records (option 4)"""
+    """handles process of searching and displaying dog records (option 4)
+    search by dog_id or display all registered dogs"""
     
     print("\n--Dog Search--")
     
-    dog_id = get_clean_name(input("Enter dog ID (eg D-1): "))
+    search_input = get_clean_name(input("Enter dog ID (eg D-1) or ALL: "))
     
-    if dog_id in clinic.dogs:
-        dog = clinic.dogs[dog_id]
+    if search_input == "ALL":
+        if not clinic.dogs:
+            print("\nNo dogs registered yet.")
+            return
+        print("\n--All Registered Dogs--")
+        for dog in clinic.dogs.values():
+            human = clinic.humans.get(dog.human_id)
+            print(f"ID: {dog.id}, name: {dog.name}, breed: {dog.breed}, human: {human.name}")
+
+    elif search_input in clinic.dogs:
+        dog = clinic.dogs[search_input]
         human = clinic.humans[dog.human_id]
         print(f"\nDog Found: {dog.id}")
         print(f"  Name: {dog.name}")
@@ -143,9 +162,9 @@ def choice_search_dog(clinic):
         print(f"  Sex: {dog.sex}")
         print(f"  Date of birth (est): {dog.dob}")
         print(f"  Human: {human.name} (ID: {human.id}), {human.phone})")
+    
     else:
         print("\nNo dog found with that ID.")
-
 
 
 def main():
