@@ -6,7 +6,7 @@ July 3, 2026
 """
 
 #TO DO list:
-# main: validate inputs, add try/except, refactor
+# main: refactor
 # test: all test cases
 
 import string
@@ -62,6 +62,92 @@ def validate_dob(date_str):
     except ValueError:
         return False
 
+def choice_register_human(clinic):
+    """handles process of registering a new human (option 1)"""
+
+    print("\n--New Human Registration--")
+
+    name_as_is = get_non_empty_input("Human's name: ")
+    name = get_clean_name(name_as_is)
+
+    phone_as_is = get_non_empty_input("Phone number: ")
+    phone = get_clean_phone(phone_as_is)
+
+    potential_id = clinic.register_human(name, phone)
+    if potential_id:
+        print(f"\nYour new ID is {potential_id}.")
+    else:
+        print("\nThat name/number is already in our system.")
+
+def choice_register_dog(clinic):
+    """handles process of regstering a new dog (option 2)"""
+    
+    print("\n--New Dog Registration--")
+
+    human_id = get_clean_name(input("Enter human id (eg H-1): "))
+    if human_id not in clinic.humans:
+        print("\nHuman ID not found.  Please register the human.")
+        return
+
+    name_as_is = get_non_empty_input("Dog's name: ")
+    name = get_clean_name(name_as_is)
+
+    breed_as_is = get_non_empty_input("Breed: ")
+    breed = get_clean_name(breed_as_is)
+    
+    while True:
+        sex_as_is = get_non_empty_input("Sex (m/f): ")
+        if validate_sex(sex_as_is):
+            sex = get_clean_name(sex_as_is)
+            break
+        print("\nPlease enter M or F.")
+    
+    while True:
+        dob_as_is = get_non_empty_input("Estimated date of birth (YYYY-MM-DD): ")
+        if validate_dob(dob_as_is):
+            dob = get_clean_name(dob_as_is)
+            break
+        print("\nInvalid date.  Please use YYYY-MM-DD (eg 2026-01-30).")
+
+    potential_id = clinic.register_dog(name, breed, sex, dob, human_id)
+    print(f"\n{name.title()}'s ID is {potential_id}.")
+
+def choice_search_human(clinic):
+    """handles process of searching and displaying human records (option 3)"""
+    
+    print("\n--Human Search--")
+    
+    human_id = get_clean_name(input("Enter human ID (eg H-1): "))
+    
+    if human_id in clinic.humans:
+        human = clinic.humans[human_id]
+        print(f"\nHuman Found: {human.id}")
+        print(f"  Name: {human.name}")
+        print(f"  Phone: {human.phone}")
+    else:
+        print("\nNo human found with that ID.")
+
+def choice_search_dog(clinic):
+    """handles process of searching and displaying dog records (option 4)"""
+    
+    print("\n--Dog Search--")
+    
+    dog_id = get_clean_name(input("Enter dog ID (eg D-1): "))
+    
+    if dog_id in clinic.dogs:
+        dog = clinic.dogs[dog_id]
+        human = clinic.humans[dog.human_id]
+        print(f"\nDog Found: {dog.id}")
+        print(f"  Name: {dog.name}")
+        print(f"  Breed: {dog.breed}")
+        print(f"  Sex: {dog.sex}")
+        print(f"  Date of birth (est): {dog.dob}")
+        print(f"  Human: {human.name} (ID: {human.id}), {human.phone})")
+    else:
+        print("\nNo dog found with that ID.")
+
+
+
 def main():
     """manage user interaction, adding to and searching in registry"""
 
@@ -75,83 +161,18 @@ def main():
         choice = input("Select an option (1-5): ")
 
         if choice == '1':
-            print("\n--New Human Registration--")
-
-            name_as_is = get_non_empty_input("Human's name: ")
-            name = get_clean_name(name_as_is)
-
-            phone_as_is = get_non_empty_input("Phone number: ")
-            phone = get_clean_phone(phone_as_is)
-
-            potential_id = clinic.register_human(name, phone)
-            if potential_id:
-                print(f"\nYour new ID is {potential_id}.")
-            else:
-                print("\nThat name/number is already in our system.")
-    
+            choice_register_human(clinic)
         elif choice == '2':
-            print("\n--New Dog Registration--")
-
-            while True:
-                human_id = get_clean_name(input("Enter human id (eg H-1): "))
-                if human_id in clinic.humans:
-                    break
-                print("\nHuman ID not found.  Please register the human.")
-                #TO DO: 'continue' but go back to outer while
-
-            name_as_is = get_non_empty_input("Dog's name: ")
-            name = get_clean_name(name_as_is)
-
-            breed_as_is = get_non_empty_input("Breed: ")
-            breed = get_clean_name(breed_as_is)
-            
-            while True:
-                sex_as_is = get_non_empty_input("Sex (m/f): ")
-                if validate_sex(sex_as_is):
-                    break
-                print("\nPlease enter M or F.")
-            
-            while True:
-                dob_as_is = get_non_empty_input("Estimated date of birth (YYYY-MM-DD): ")
-                if validate_dob(dob_as_is):
-                    break
-                print("\nInvalid date.  Please use YYYY-MM-DD (eg 2026-01-30).")
-
-            potential_id = clinic.register_dog(name, breed, sex, dob, human_id)
-            print(f"\n{name.title()}'s ID is {potential_id}.")
-
+            choice_register_dog(clinic)
         elif choice == '3':
-            print("\n--Human Search--")
-            human_id = get_clean_name(input("Enter human ID (eg H-1): "))
-            if human_id in clinic.humans:
-                human = clinic.humans[human_id]
-                print(f"\nHuman Found: {human.id}")
-                print(f"  Name: {human.name}")
-                print(f"  Phone: {human.phone}")
-            else:
-                print("\nNo human found with that ID.")
-        
+            choice_search_human(clinic)        
         elif choice == '4':
-            print("\n--Dog Search--")
-            dog_id = get_clean_name(input("Enter dog ID (eg D-1): "))
-            if dog_id in clinic.dogs:
-                dog = clinic.dogs[dog_id]
-                human = clinic.humans[dog.human_id]
-                print(f"\nDog Found: {dog.id}")
-                print(f"  Name: {dog.name}")
-                print(f"  Breed: {dog.breed}")
-                print(f"  Sex: {dog.sex}")
-                print(f"  Date of birth (est): {dog.dob}")
-                print(f"  Human: {human.name} (ID: {human.id}), {human.phone})")
-            else:
-                print("\nNo dog found with that ID.")
-
+            choice_search_dog(clinic)
         elif choice == '5':
-            print("\nExisting application.")
+            print("\nExiting application.")
             break
-
         else:
             print("\nInvalid choice.  Please pick options 1 through 5.")
 
 if __name__ == "__main__":
-    main()    
+    main()
