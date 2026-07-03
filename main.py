@@ -73,8 +73,8 @@ class Registration:
         if not name or not phone:
             raise ValueError("name and phone number cannot be blank")
         
-        clean_name = clean_name(name)
-        clean_phone = clean_phone(phone)        
+        clean_name = get_clean_name(name)
+        clean_phone = get_clean_phone(phone)        
 
         for existing_id, existing_human in self.humans.items():
             if existing_human.name == clean_name and existing_human.phone == clean_phone:
@@ -90,7 +90,7 @@ class Registration:
         """register new dog if human exists,
         return generated id"""
         
-        clean_human_id = clean_name(human_id)
+        clean_human_id = get_clean_name(human_id)
 
         if clean_human_id not in self.humans:
             raise ValueError(f"Human ID '{clean_human_id}' is not registered in system")
@@ -101,10 +101,10 @@ class Registration:
         self.save_data()
         return new_id
 
-def clean_name(name: str):
+def get_clean_name(name: str):
     return name.strip().upper()
     
-def clean_phone(phone: str):
+def get_clean_phone(phone: str):
     clean_phone = ""
     for char in phone:
         if char in string.digits:
@@ -136,11 +136,11 @@ def main():
 
         if choice == '1':
             print("\n--New Human Registration--")
-            name = clean_name(input("Human's name: "))
-            phone = clean_phone(input("Phone number: "))
-            potential_id = clinic.register_owner(name, phone)
+            name = get_clean_name(input("Human's name: "))
+            phone = get_clean_phone(input("Phone number: "))
+            potential_id = clinic.register_human(name, phone)
             if potential_id:
-                print("You've been registered under ID {potential_id}")
+                print(f"\nYou've been registered under ID {potential_id}")
             else:
                 print("That name/number is already in our system.")
     
