@@ -70,14 +70,19 @@ def main():
     print_header()
 
     while True:
-        
+
         print_menu()
         choice = input("Select an option (1-5): ")
 
         if choice == '1':
             print("\n--New Human Registration--")
-            name = get_clean_name(input("Human's name: "))
-            phone = get_clean_phone(input("Phone number: "))
+
+            name_as_is = get_non_empty_input("Human's name: ")
+            name = get_clean_name(name_as_is)
+
+            phone_as_is = get_non_empty_input("Phone number: ")
+            phone = get_clean_phone(phone_as_is)
+
             potential_id = clinic.register_human(name, phone)
             if potential_id:
                 print(f"\nYour new ID is {potential_id}.")
@@ -87,16 +92,31 @@ def main():
         elif choice == '2':
             print("\n--New Dog Registration--")
 
-            human_id = get_clean_name(input("Enter human id (eg H-1): "))
-            if human_id in clinic.humans:
-                print("Human ID not found.  Please register the human.")
+            while True:
+                human_id = get_clean_name(input("Enter human id (eg H-1): "))
+                if human_id in clinic.humans:
+                    break
+                print("\nHuman ID not found.  Please register the human.")
+                #TO DO: 'continue' but go back to outer while
 
+            name_as_is = get_non_empty_input("Dog's name: ")
+            name = get_clean_name(name_as_is)
 
-            #TO DO: validate these inputs
-            name = get_clean_name(input("Dog's name: "))
-            breed = input("Breed: ")
-            sex = input("Sex (m/f): ")
-            dob = input("Estimated date of birth (YYYY-MM-DD): ")
+            breed_as_is = get_non_empty_input("Breed: ")
+            breed = get_clean_name(breed_as_is)
+            
+            while True:
+                sex_as_is = get_non_empty_input("Sex (m/f): ")
+                if validate_sex(sex_as_is):
+                    break
+                print("\nPlease enter M or F.")
+            
+            while True:
+                dob_as_is = get_non_empty_input("Estimated date of birth (YYYY-MM-DD): ")
+                if validate_dob(dob_as_is):
+                    break
+                print("\nInvalid date.  Please use YYYY-MM-DD (eg 2026-01-30).")
+
             potential_id = clinic.register_dog(name, breed, sex, dob, human_id)
             print(f"\n{name.title()}'s ID is {potential_id}.")
 
