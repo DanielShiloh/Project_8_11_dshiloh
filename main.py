@@ -5,7 +5,8 @@ Daniel Shiloh
 July 3, 2026
 """
 
-##generally to do: add try/except, actually read/write to file w json
+#TO DO list: mostly just actually read/write to file w json
+#generally to do: add try/except, refactor, test cases
 
 from pathlib import Path
 import string
@@ -20,10 +21,10 @@ class Human:
         self.name = name
         self.phone = phone
         
-    #def to_dict
+    #TO DO: def to_dict
         """convert human data to dict, for json"""
 
-    #def from_dict
+    #TO DO: def from_dict
         """create Human instance from dict"""
 
 class Dog:
@@ -38,10 +39,10 @@ class Dog:
         self.dob = dob
         self.human_id = human_id
 
-    #def to_dict
+    #TO DO: def to_dict
         """convert dog data to dict, for json"""
 
-    #def from_dict
+    #TO DO: def from_dict
         """create Dog instance from dict"""
 
 class Registration:
@@ -58,6 +59,7 @@ class Registration:
         """read from registry file with exeption handling"""
         if not self.db_path.exists():
             return
+        #TO DO:
         #if content
         #load humans
         #load dogs
@@ -65,7 +67,7 @@ class Registration:
     def save_data(self):
         """write current data to registry file"""
         final_dict = {}
-        #for human in humans, dog in dogs, add to dict)
+        #TO DO: for human in humans, dog in dogs, add to dict
         self.db_path.write_text(json.dumps(final_dict))
 
     def register_human(self, name: str, phone: str):
@@ -73,7 +75,7 @@ class Registration:
         else add human to humans and return generated id"""
 
         if not name or not phone:
-            raise ValueError("name and phone number cannot be blank")
+            raise ValueError("Name and phone number cannot be blank.")
 
         for existing_id, existing_human in self.humans.items():
             if existing_human.name == name and existing_human.phone == phone:
@@ -90,7 +92,7 @@ class Registration:
         return generated id"""
         
         if human_id not in self.humans:
-            raise ValueError(f"Human ID '{human_id}' is not registered in system")
+            raise ValueError(f"Human ID '{human_id}' is not registered in system.")
 
         next_num = len(self.dogs) + 1
         new_id = f"D-{next_num}"
@@ -139,12 +141,12 @@ def main():
             if potential_id:
                 print(f"\nYour new ID is {potential_id}.")
             else:
-                print("That name/number is already in our system.")
+                print("\nThat name/number is already in our system.")
     
         elif choice == '2':
             print("\n--New Dog Registration--")
             human_id = get_clean_name(input("Enter owner id (eg H-1): "))
-            ######validate these inputs
+            #TO DO: validate these inputs
             name = get_clean_name(input("Dog's name: "))
             breed = input("Breed: ")
             sex = input("Sex: ")
@@ -161,7 +163,7 @@ def main():
                 print(f"  Name: {human.name}")
                 print(f"  Phone: {human.phone}")
             else:
-                print("No human found with that ID.")
+                print("\nNo human found with that ID.")
         
         elif choice == '4':
             print("\n--Dog Search--")
@@ -176,14 +178,14 @@ def main():
                 print(f"  Date of birth (est): {dog.dob}")
                 print(f"  Human: {human.name} (ID: {human.id}), {human.phone})")
             else:
-                print("No dog found with that ID.")
+                print("\nNo dog found with that ID.")
 
         elif choice == '5':
             print("\nExisting application.")
             break
 
         else:
-            print("Invalid choice.  Please pick options 1 through 5.")
+            print("\nInvalid choice.  Please pick options 1 through 5.")
 
 if __name__ == "__main__":
     main()    
