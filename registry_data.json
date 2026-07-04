@@ -14,6 +14,11 @@
             "id": "H-3",
             "name": "DANIEL SHILOH",
             "phone": "1234567890"
+        },
+        "H-4": {
+            "id": "H-4",
+            "name": "BOB SMITH",
+            "phone": "123456789"
         }
     },
     "dogs": {

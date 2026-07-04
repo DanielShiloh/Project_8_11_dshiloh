@@ -1,12 +1,9 @@
 """
 Daniel's Dog Clinic
----------------------purpose------------------
+Allow user to register humans and their dogs with 'vet clinic'
 Daniel Shiloh
-July 3, 2026
+July 4, 2026
 """
-
-#TO DO list:
-# test: all test cases
 
 import string
 from registration import Registration
